@@ -1,0 +1,54 @@
+{
+  "name": "tsoam-church-management-system",
+  "version": "2.0.0",
+  "description": "Complete Church Management System for The Seed of Abraham Ministry (TSOAM)",
+  "main": "server/server.js",
+  "scripts": {
+    "setup": "node setup-system.js",
+    "cleanup": "node cleanup-system.js",
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
+    "build": "node scripts/build-system.js",
+    "build:client": "cd client && npm install && npm run build-only",
+    "build-production": "node scripts/build-optimize.js",
+    "start": "cd server && npm start",
+    "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\"",
+    "dev-server": "cd server && npm run dev",
+    "dev-client": "cd client && npm run dev",
+    "create-db": "mysql -u root -p -e \"CREATE DATABASE IF NOT EXISTS tsoam_church_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci\"",
+    "import-schema": "mysql -u root -p tsoam_church_db < database/schema.sql",
+    "optimize-db": "mysql -u root -p tsoam_church_db < database/optimize_database.sql",
+    "backup-db": "mysqldump -u root -p tsoam_church_db > backups/tsoam_backup_$(date +%Y%m%d_%H%M%S).sql",
+    "test-connection": "cd server && node -e \"require('./config/database').testConnection()\"",
+    "production": "npm run build-production",
+    "reset-db": "mysql -u root -p -e \"DROP DATABASE IF EXISTS tsoam_church_db; CREATE DATABASE tsoam_church_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci\" && npm run import-schema",
+    "clean": "rm -rf client/dist server/uploads/* logs/* node_modules/*/node_modules",
+    "health-check": "curl -f http://localhost:3001/api/health || exit 1"
+  },
+  "keywords": [
+    "church",
+    "management",
+    "system",
+    "tsoam",
+    "members",
+    "finance",
+    "inventory",
+    "hr",
+    "welfare"
+  ],
+  "author": "TSOAM Development Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tsoam/church-management-system.git"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  }
+}
